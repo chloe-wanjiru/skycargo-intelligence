@@ -1,0 +1,10 @@
+# Ignore the large dataset CSV file
+data/*.csv
+
+# Ignore Python cache and system files
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Ignore local Streamlit settings
+.streamlit/
