@@ -10,79 +10,288 @@ from src.data_pipeline import load_and_prep_cargo_data
 from src.model import train_baggage_risk_model, predict_risk
 from src.optimizer import optimize_payload, calculate_delay_penalties
 
-st.set_page_config(page_title="Cargo Payload & Baggage Intelligence System", layout="wide")
+st.set_page_config(
+    page_title="SkyCargo Intelligence",
+    page_icon=":material/flight_takeoff:",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
-# --- Executive Dark Theme Styling ---
+# --- Alpine airline editorial styling ---
 st.markdown("""
     <style>
-    /* Main Background & Global Typography */
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    :root {
+        --ink: #171717;
+        --muted: #73736f;
+        --paper: #f4f1ea;
+        --panel: #fffdf8;
+        --panel-raised: #e8e4da;
+        --line: rgba(23, 23, 23, .14);
+        --cobalt: #2846d8;
+        --lime: #d9f276;
+        --orange: #f26b45;
+    }
+
     .stApp {
-        background-color: #0F0F12;
-        color: #F5F5F7;
-        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background:
+            linear-gradient(rgba(23, 23, 23, .025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(23, 23, 23, .025) 1px, transparent 1px),
+            var(--paper);
+        background-size: 32px 32px;
+        color: var(--ink);
+        font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
     }
-    
-    /* Sidebar Styling */
+
+    [data-testid="stAppViewContainer"] > .main {
+        background: transparent;
+    }
+
+    [data-testid="stMainBlockContainer"] {
+        max-width: 1440px;
+        padding: 2.5rem clamp(1.25rem, 6vw, 6rem) 4rem;
+    }
+
+    .block-container {
+        padding-top: 2rem;
+    }
+
     section[data-testid="stSidebar"] {
-        background-color: #16161C !important;
-        border-right: 1px solid rgba(212, 175, 55, 0.4);
+        background: var(--ink) !important;
+        border-right: 1px solid var(--line);
     }
-    
-    /* Headers & Accent Colors */
-    h1 {
-        color: #FFFFFF !important;
-        font-weight: 700;
-        letter-spacing: 1.5px;
+
+    section[data-testid="stSidebar"] > div {
+        padding: 1.5rem 1.25rem;
     }
-    h2, h3 {
-        color: #D4AF37 !important;
-        font-weight: 500;
-        letter-spacing: 1px;
+
+    section[data-testid="stSidebar"] h2,
+    section[data-testid="stSidebar"] h3 {
+        color: #fffdf8 !important;
+        letter-spacing: -.03em;
     }
-    
-    /* KPI Metric Cards */
-    div[data-testid="stMetric"] {
-        background: linear-gradient(145deg, #1C1C24, #121217);
-        border: 1px solid rgba(212, 175, 55, 0.3);
-        border-radius: 8px;
-        padding: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    }
-    
-    /* Label Size & Formatting to Prevent Ellipses (...) */
-    div[data-testid="stMetric"] label {
-        color: #D4AF37 !important;
-        font-size: 0.72rem !important;
+
+    section[data-testid="stSidebar"] label {
+        color: #b8b8b1 !important;
+        font-family: 'DM Mono', monospace;
+        font-size: .62rem !important;
+        letter-spacing: .06em;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+    }
+
+    section[data-testid="stSidebar"] [data-baseweb="slider"] div[role="slider"] {
+        background: var(--lime) !important;
+        border-color: var(--lime) !important;
+    }
+
+    section[data-testid="stSidebar"] [data-baseweb="slider"] > div > div {
+        background: rgba(217, 242, 118, .25);
+    }
+
+    section[data-testid="stSidebar"] input,
+    section[data-testid="stSidebar"] [data-baseweb="select"] > div {
+        background: rgba(255, 255, 255, .08) !important;
+        border-color: var(--line) !important;
+        color: #fffdf8 !important;
+    }
+
+    section[data-testid="stSidebar"] input[type="number"] {
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+    }
+
+    .brand-mark {
+        align-items: center;
+        display: flex;
+        gap: .75rem;
+        margin-bottom: 3rem;
+    }
+
+    .brand-badge {
+        align-items: center;
+        background: var(--orange);
+        border-radius: 50%;
+        box-shadow: 5px 5px 0 var(--ink);
+        color: #fffdf8;
+        display: inline-flex;
+        font-size: 1rem;
+        font-weight: 700;
+        height: 42px;
+        justify-content: center;
+        width: 42px;
+    }
+
+    .brand-name {
+        color: #fffdf8;
+        font-size: .78rem;
+        font-weight: 600;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+    }
+
+    .eyebrow,
+    .section-label {
+        color: var(--cobalt);
+        font-family: 'DM Mono', monospace;
+        font-size: .68rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .eyebrow {
+        align-items: center;
+        display: flex;
+        gap: .65rem;
+        margin: 0 0 1.35rem;
+    }
+
+    .eyebrow::before {
+        background: var(--orange);
+        border-radius: 50%;
+        content: '';
+        height: 8px;
+        width: 8px;
+    }
+
+    h1 {
+        color: var(--ink) !important;
+        font-size: clamp(2.5rem, 5vw, 5.2rem) !important;
+        font-weight: 700 !important;
+        letter-spacing: -.075em !important;
+        line-height: .92 !important;
+        max-width: 900px;
+    }
+
+    h1 em, h2 em {
+        color: var(--cobalt);
+        font-style: normal;
+    }
+
+    h2, h3 {
+        color: var(--ink) !important;
+        letter-spacing: -.045em;
+    }
+
+    h2 {
+        font-size: clamp(1.5rem, 3vw, 2.4rem) !important;
+        line-height: 1.05 !important;
+    }
+
+    .hero-copy {
+        color: #565652;
+        font-size: 1rem;
+        line-height: 1.65;
+        max-width: 560px;
+    }
+
+    .section-rule {
+        border-top: 1px solid var(--line);
+        margin: 3rem 0 1.5rem;
+    }
+
+    div[data-testid="stMetric"] {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        min-height: 116px;
+        padding: 1rem 1.1rem;
+        box-shadow: 6px 6px 0 rgba(23, 23, 23, .08);
+        transition: transform .2s ease, border-color .2s ease;
+    }
+
+    div[data-testid="stMetric"]:hover {
+        border-color: var(--cobalt);
+        transform: translateY(-2px);
+    }
+
+    div[data-testid="stMetric"] label {
+        color: var(--muted) !important;
+        font-family: 'DM Mono', monospace;
+        font-size: .64rem !important;
+        text-transform: uppercase;
+        letter-spacing: .04em;
         white-space: normal !important;
         overflow: visible !important;
         text-overflow: clip !important;
     }
 
     div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
-        font-size: 1.6rem !important;
+        color: var(--ink) !important;
+        font-size: 1.65rem !important;
+        font-weight: 700;
         white-space: nowrap !important;
     }
-    
-    /* Progress Bar Accent */
+
+    div[data-testid="stMetric"] [data-testid="stMetricDelta"] {
+        color: var(--cobalt) !important;
+        font-family: 'DM Mono', monospace;
+        font-size: .68rem;
+    }
+
     .stProgress > div > div > div > div {
-        background-color: #E50914 !important;
+        background: linear-gradient(90deg, var(--cobalt), var(--orange)) !important;
     }
-    
-    /* Slider Accent Styling (Clean, no red tooltip box) */
-    div[data-baseweb="slider"] div[role="slider"] {
-        background-color: #E50914 !important;
-        border-color: #E50914 !important;
+
+    div[data-testid="stProgress"] {
+        background: rgba(23, 23, 23, .1);
+        border-radius: 0;
+        height: 10px;
     }
-    div[data-baseweb="slider"] div[data-testid="stTickBar"] + div {
-        background-color: #E50914 !important;
+
+    .stButton > button {
+        background: var(--cobalt);
+        border: 1px solid var(--cobalt);
+        border-radius: 3px;
+        color: #fffdf8;
+        font-weight: 600;
+    }
+
+    .stButton > button:hover {
+        background: var(--orange);
+        border-color: var(--orange);
+        color: #fffdf8;
+    }
+
+    [data-testid="stDataFrame"], .stPlotlyChart {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        border-top: 1px solid var(--line);
+        padding: 1rem;
+    }
+
+    [data-testid="stDataFrame"] * {
+        border-color: var(--line) !important;
+    }
+
+    [data-testid="stExpander"] {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+    }
+
+    [data-testid="stAlert"] {
+        background: rgba(255, 253, 248, .9);
+        border: 1px solid var(--line);
+        color: var(--ink);
     }
     </style>
 """, unsafe_allow_html=True)
 
-st.title("SkyCargo & Baggage Intelligence System")
-st.caption("Flight Operations & Linear Payload Optimization Engine")
+st.markdown(
+    '<div class="brand-mark"><span class="brand-badge">S</span>'
+    '<span class="brand-name">SkyCargo intelligence</span></div>',
+    unsafe_allow_html=True,
+)
+
+st.markdown('<p class="eyebrow">Live flight operations / predictive analytics</p>', unsafe_allow_html=True)
+st.markdown("## Make every kilogram count with <em>clarity.</em>", unsafe_allow_html=True)
+st.markdown(
+   '<p class="hero-copy">A real-time command center for baggage risk, payload capacity, '
+   'and the financial impact of disruption.</p>',
+   unsafe_allow_html=True,
+)
 
 @st.cache_resource
 def get_data_and_model():
@@ -94,7 +303,8 @@ try:
     df, model = get_data_and_model()
     
     # --- Sidebar Controls ---
-    st.sidebar.header("Flight Operational Inputs")
+    st.sidebar.markdown('<p class="section-label">Control room / inputs</p>', unsafe_allow_html=True)
+    st.sidebar.header("Flight operations")
     dep_delay = st.sidebar.slider("Departure Delay (mins)", 0, 360, 15)
     connect_time = st.sidebar.slider("Connecting Window (mins)", 15, 120, 35)
     passengers = st.sidebar.slider("Passenger Count", 50, 220, 150)
@@ -150,10 +360,11 @@ try:
         value=f"${cargo_rev:,}"
     )
 
-    st.markdown("---")
+    st.markdown('<div class="section-rule"></div>', unsafe_allow_html=True)
 
     # --- Operational Loss Liabilities Dashboard ---
-    st.subheader("Financial Impact & Delay Liabilities")
+    st.markdown('<p class="section-label">01 / Cost of disruption</p>', unsafe_allow_html=True)
+    st.subheader("Financial impact & delay liabilities")
     d_col1, d_col2, d_col3 = st.columns(3)
 
     total_loss = delay_metrics['total_delay_loss']
@@ -184,15 +395,16 @@ try:
             delta_color="inverse" if payout_loss > 0 else "normal"
         )
 
-    st.markdown("---")
+    st.markdown('<div class="section-rule"></div>', unsafe_allow_html=True)
     
     # --- Structural Payload Bar ---
-    st.subheader("Payload Weight Capacity Utilization")
+    st.markdown('<p class="section-label">02 / Load profile</p>', unsafe_allow_html=True)
+    st.subheader("Payload capacity utilization")
     st.progress(min(opt_results['weight_status_pct'] / 100.0, 1.0))
     st.write(f"**Aircraft Payload Limit Used:** {opt_results['weight_status_pct']}%")
 
     # --- Operational Weight Breakdown Chart ---
-    st.subheader("Operational Weight Breakdown")
+    st.subheader("Operational weight breakdown")
     weight_data = pd.DataFrame({
         "Category": ["Passengers", "Baggage", "Available Cargo"],
         "Weight (kg)": [total_pass_wt, total_bag_wt, opt_results['available_cargo_capacity_kg']]
@@ -203,11 +415,10 @@ try:
         x="Category", 
         y="Weight (kg)", 
         color="Category",
-        # Distinct high-contrast palette: Gold, Electric Cyan, Crimson
         color_discrete_map={
-            "Passengers": "#D4AF37", 
-            "Baggage": "#00E5FF", 
-            "Available Cargo": "#E50914"
+            "Passengers": "#2846d8",
+            "Baggage": "#d9f276",
+            "Available Cargo": "#f26b45"
         },
         text_auto='.0f'
     )
@@ -221,13 +432,13 @@ try:
     fig.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#F5F5F7', size=13),
+        font=dict(color='#171717', family='Plus Jakarta Sans, sans-serif', size=13),
         xaxis=dict(showgrid=False),
-        yaxis=dict(showgrid=True, gridcolor='#262630')
+        yaxis=dict(showgrid=True, gridcolor='rgba(160,190,220,.14)')
     )
     
     fig.update_yaxes(range=[0, max_payload * 1.1])
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 except Exception as e:
     st.error(f"Error starting application: {e}")

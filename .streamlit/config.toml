@@ -1,0 +1,20 @@
+[theme]
+base = "light"
+primaryColor = "#fa765c"
+backgroundColor = "#f3f1ea"
+secondaryBackgroundColor = "#ebe9e1"
+textColor = "#20221f"
+linkColor = "#20221f"
+borderColor = "rgba(32, 34, 31, 0.16)"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "small"
+buttonRadius = "small"
+font = "Manrope:https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+codeFont = "DM Mono:https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap"
+chartCategoricalColors = ["#20221f", "#96c7e9", "#fa765c", "#d7f36a"]
+
+[theme.sidebar]
+backgroundColor = "#f3f1ea"
+secondaryBackgroundColor = "#ebe9e1"
+borderColor = "rgba(32, 34, 31, 0.16)"

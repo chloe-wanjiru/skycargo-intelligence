@@ -6,7 +6,7 @@ An executive flight operations dashboard built with Streamlit. The system integr
 * Baggage Misconnect Risk Prediction: Machine learning inference engine predicting misconnection probability based on operational parameters (connecting windows, departure delays, passenger count). 
 * Payload Capacity Optimization: Linear weight optimization engine allocating remaining aircraft payload capacity to high-margin commercial cargo.
 * Financial Loss Liability Calculator: Dynamic delay penalty breakdown calculating passenger compensation, hotel accommodation, and food voucher liabilities.
-* Executive Visualization: Custom dark-themed user interface featuring high-contrast operational analytics and weight distribution breakdowns.
+* Executive Visualization: Editorial portfolio-inspired interface using warm paper tones, ink typography, lime/coral accents, and high-contrast operational analytics.
 
 
 ## Project Structure
@@ -23,8 +23,8 @@ An executive flight operations dashboard built with Streamlit. The system integr
 ## Local Installation & Setup
 
 1. Clone the repository:
-   git clone <>
-   cd <>
+   git clone <https://github.com/chloe-wanjiru/skycargo-intelligence.git>
+   cd <skycargo-intelligence>
 
 2. Create and activate a virtual environment:
    python -m venv venv
