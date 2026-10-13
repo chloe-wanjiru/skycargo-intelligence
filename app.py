@@ -123,7 +123,7 @@ st.markdown("""
     }
 
     .brand-name {
-        color: #fffdf8;
+        color: #000000;
         font-size: .78rem;
         font-weight: 600;
         letter-spacing: .1em;
