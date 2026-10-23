@@ -16,12 +16,35 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+# Create a top header row with a toggle button aligned to the right
+header_col1, header_col2 = st.columns([6, 1])
+
+with header_col1:
+    st.markdown("### SKYCARGO INTELLIGENCE")
+
+with header_col2:
+    # Using a simple button or checkbox as a toggle switch
+    is_dark = st.checkbox("Dark Theme", value=False)
+
+# Apply styling rules based on `is_dark`
+bg_color = "#121212" if is_dark else "#fcfbf9"
+text_color = "#f5f5f5" if is_dark else "#1a1a1a"
+
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-color: {bg_color};
+        color: {text_color};
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 # --- Alpine airline editorial styling ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
     :root {
         --ink: #171717;
         --muted: #73736f;
@@ -41,7 +64,7 @@ st.markdown("""
             var(--paper);
         background-size: 32px 32px;
         color: var(--ink);
-        font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+        font-family: 'Times New Roman', Times, serif;
     }
 
     [data-testid="stAppViewContainer"] > .main {
@@ -74,7 +97,7 @@ st.markdown("""
 
     section[data-testid="stSidebar"] label {
         color: #b8b8b1 !important;
-        font-family: 'DM Mono', monospace;
+        font-family: 'Times New Roman', Times, serif;
         font-size: .62rem !important;
         letter-spacing: .06em;
         text-transform: uppercase;
@@ -133,7 +156,7 @@ st.markdown("""
     .eyebrow,
     .section-label {
         color: var(--cobalt);
-        font-family: 'DM Mono', monospace;
+        font-family: 'Times New Roman', Times, serif;
         font-size: .68rem;
         letter-spacing: .08em;
         text-transform: uppercase;
@@ -207,7 +230,7 @@ st.markdown("""
 
     div[data-testid="stMetric"] label {
         color: var(--muted) !important;
-        font-family: 'DM Mono', monospace;
+        font-family: 'Times New Roman', Times, serif;
         font-size: .64rem !important;
         text-transform: uppercase;
         letter-spacing: .04em;
@@ -225,7 +248,7 @@ st.markdown("""
 
     div[data-testid="stMetric"] [data-testid="stMetricDelta"] {
         color: var(--cobalt) !important;
-        font-family: 'DM Mono', monospace;
+        font-family: 'Times New Roman', Times, serif;
         font-size: .68rem;
     }
 
@@ -286,7 +309,6 @@ st.markdown(
 )
 
 st.markdown('<p class="eyebrow">Live flight operations / predictive analytics</p>', unsafe_allow_html=True)
-st.markdown("## Make every kilogram count with <em>clarity.</em>", unsafe_allow_html=True)
 st.markdown(
    '<p class="hero-copy">A real-time command center for baggage risk, payload capacity, '
    'and the financial impact of disruption.</p>',
@@ -304,7 +326,7 @@ try:
     
     # --- Sidebar Controls ---
     st.sidebar.markdown('<p class="section-label">Control room / inputs</p>', unsafe_allow_html=True)
-    st.sidebar.header("Flight operations")
+    st.sidebar.header("Set the Flight Envelope")
     dep_delay = st.sidebar.slider("Departure Delay (mins)", 0, 360, 15)
     connect_time = st.sidebar.slider("Connecting Window (mins)", 15, 120, 35)
     passengers = st.sidebar.slider("Passenger Count", 50, 220, 150)
@@ -363,8 +385,8 @@ try:
     st.markdown('<div class="section-rule"></div>', unsafe_allow_html=True)
 
     # --- Operational Loss Liabilities Dashboard ---
-    st.markdown('<p class="section-label">01 / Cost of disruption</p>', unsafe_allow_html=True)
-    st.subheader("Financial impact & delay liabilities")
+    st.markdown('<p class="section-label">01 / Cost of Disruption</p>', unsafe_allow_html=True)
+    st.subheader("Delay Chain")
     d_col1, d_col2, d_col3 = st.columns(3)
 
     total_loss = delay_metrics['total_delay_loss']
@@ -398,13 +420,13 @@ try:
     st.markdown('<div class="section-rule"></div>', unsafe_allow_html=True)
     
     # --- Structural Payload Bar ---
-    st.markdown('<p class="section-label">02 / Load profile</p>', unsafe_allow_html=True)
-    st.subheader("Payload capacity utilization")
+    st.markdown('<p class="section-label">02 / Weight Profile & Limits</p>', unsafe_allow_html=True)
+    st.subheader("Weight Stack")
     st.progress(min(opt_results['weight_status_pct'] / 100.0, 1.0))
     st.write(f"**Aircraft Payload Limit Used:** {opt_results['weight_status_pct']}%")
 
     # --- Operational Weight Breakdown Chart ---
-    st.subheader("Operational weight breakdown")
+    st.subheader("Weight Allocation")
     weight_data = pd.DataFrame({
         "Category": ["Passengers", "Baggage", "Available Cargo"],
         "Weight (kg)": [total_pass_wt, total_bag_wt, opt_results['available_cargo_capacity_kg']]
@@ -432,7 +454,7 @@ try:
     fig.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#171717', family='Plus Jakarta Sans, sans-serif', size=13),
+        font=dict(color='#171717', family='Times New Roman, Times, serif', size=13),
         xaxis=dict(showgrid=False),
         yaxis=dict(showgrid=True, gridcolor='rgba(160,190,220,.14)')
     )
