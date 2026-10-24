@@ -3,10 +3,17 @@
 An executive flight operations dashboard built with Streamlit. The system integrates predictive machine learning models with linear payload optimization to evaluate baggage misconnection risks, maximize commercial cargo capacity utilization, and calculate financial delay liabilities in real time.
 
 ## Core Features
-* Baggage Misconnect Risk Prediction: Machine learning inference engine predicting misconnection probability based on operational parameters (connecting windows, departure delays, passenger count). 
+* Baggage Misconnect Risk Prediction: Machine learning inference engine predicting misconnection probability based on operational parameters (connecting windows, departure delays, passenger count).
+  <img width="422" height="356" alt="image" src="https://github.com/user-attachments/assets/0f37061e-c55a-475d-a025-363bed11174e" />
+
 * Payload Capacity Optimization: Linear weight optimization engine allocating remaining aircraft payload capacity to high-margin commercial cargo.
+  <img width="374" height="160" alt="image" src="https://github.com/user-attachments/assets/d18b0c3d-e4cf-4b0d-af7e-6d9cc5ad38d7" />
+
 * Financial Loss Liability Calculator: Dynamic delay penalty breakdown calculating passenger compensation, hotel accommodation, and food voucher liabilities.
-* Executive Visualization: Editorial portfolio-inspired interface using warm paper tones, ink typography, lime/coral accents, and high-contrast operational analytics.
+  <img width="932" height="140" alt="image" src="https://github.com/user-attachments/assets/b041b783-6e81-493c-a486-fbfbd2e05c37" />
+
+* Visual Breakdown: It is a horizontal bar chart breaking down the aircraft's weight distribution into three core categories: Passengers, Baggage and Available Cargo.
+<img width="646" height="374" alt="image" src="https://github.com/user-attachments/assets/e22b00c1-a90d-4b8c-bbbd-6fcf13d8113b" />
 
 
 ## Project Structure
