@@ -22,7 +22,7 @@ def load_and_prep_cargo_data(csv_path: str = "data/flights.csv") -> pd.DataFrame
     """
     df = con.execute(query).df()
     
-    # Generate realistic simulated operational payload data based on distance & delays
+    # Generate realistic simulated operational payload data based on distance and delays
     np.random.seed(42)
     df['passenger_count'] = np.random.randint(80, 220, size=len(df))
     df['baggage_count'] = (df['passenger_count'] * np.random.uniform(1.1, 1.4, size=len(df))).astype(int)
