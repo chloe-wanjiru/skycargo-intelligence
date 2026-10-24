@@ -7,7 +7,7 @@ An executive flight operations dashboard built with Streamlit. The system integr
   <img width="422" height="356" alt="image" src="https://github.com/user-attachments/assets/0f37061e-c55a-475d-a025-363bed11174e" />
 
 * Payload Capacity Optimization: Linear weight optimization engine allocating remaining aircraft payload capacity to high-margin commercial cargo.
-  <img width="374" height="160" alt="image" src="https://github.com/user-attachments/assets/d18b0c3d-e4cf-4b0d-af7e-6d9cc5ad38d7" />
+ <img width="679" height="212" alt="image" src="https://github.com/user-attachments/assets/a2c48ed9-ef2d-45e8-8dad-bf2bfe4628be" />
 
 * Financial Loss Liability Calculator: Dynamic delay penalty breakdown calculating passenger compensation, hotel accommodation, and food voucher liabilities.
   <img width="932" height="140" alt="image" src="https://github.com/user-attachments/assets/b041b783-6e81-493c-a486-fbfbd2e05c37" />
